@@ -19,6 +19,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://datasets.api.dataidea.org",
+    'https://dataidea-datasets-backend-production.up.railway.app/'
+]
+
 
 # Application definition
 
