@@ -22,7 +22,7 @@ if DEBUG:
     SECURE_SSL_REDIRECT = False
     SECURE_PROXY_SSL_HEADER = None
 else:
-    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
+    ALLOWED_HOSTS = ['*']
     SECURE_SSL_REDIRECT = False
     SECURE_PROXY_SSL_HEADER = None
 
