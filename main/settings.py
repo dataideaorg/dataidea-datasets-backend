@@ -18,13 +18,13 @@ SECRET_KEY = 'django-insecure-l2+_jfq1y08lzm9x#^e5mvj$_ioh&ug9*7ci$vm&=z#591rl91
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://datasets.api.dataidea.org",
-    'https://dataidea-datasets-backend-production.up.railway.app/'
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://datasets.api.dataidea.org",
+#     'https://dataidea-datasets-backend-production.up.railway.app/'
+# ]
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -73,13 +74,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'main.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-# os.environ.setdefault("PGDATABASE", "dataidea_logger")
-# os.environ.setdefault("PGUSER", "postgres")
-# os.environ.setdefault("PGPASSWORD", "postgres")
-# os.environ.setdefault("PGHOST", "localhost")
-# os.environ.setdefault("PGPORT", "5432")
+
 
 # for local development
 if os.environ.get('DEBUG') == 'True':
@@ -140,12 +135,28 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# AWS S3 Storage Configuration
+USE_S3 = os.environ.get('USE_S3') == 'True'
 
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+if USE_S3:
+    # AWS Settings
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = 'dataidea-base-bucket'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    AWS_LOCATION = 'datasets'
+    
+    # S3 Public Media Settings
+    PUBLIC_MEDIA_LOCATION = 'datasets'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
+    # Local media settings
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

@@ -1,6 +1,13 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+from django.conf import settings
+
+if settings.USE_S3:
+    from .storage import DatasetStorage
+    storage = DatasetStorage()
+else:
+    storage = None
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -22,7 +29,7 @@ class Dataset(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = models.TextField()
-    file = models.FileField(upload_to='datasets/')
+    file = models.FileField(upload_to='datasets/', storage=storage if settings.USE_S3 else None)
     file_size = models.PositiveIntegerField(help_text="Size in KB", blank=True, null=True)
     file_type = models.CharField(max_length=50, blank=True)
     categories = models.ManyToManyField(Category, related_name='datasets')
