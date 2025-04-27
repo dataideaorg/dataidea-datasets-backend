@@ -1,1 +1,1 @@
-web: ./railway_setup.sh 
+web: bash railway_setup.sh
