@@ -10,4 +10,4 @@ python manage.py create_superuser
 python manage.py collectstatic --noinput
 
 # Start gunicorn server
-exec gunicorn main.wsgi:application --bind 0.0.0.0:$PORT
+exec gunicorn main.wsgi:application --bind 0.0.0.0:8080
