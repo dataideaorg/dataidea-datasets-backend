@@ -23,8 +23,8 @@ if DEBUG:
     SECURE_PROXY_SSL_HEADER = None
 else:
     ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
-    # SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = False
+    SECURE_PROXY_SSL_HEADER = None
 
 CSRF_TRUSTED_ORIGINS = [
     "https://datasets.api.dataidea.org",
