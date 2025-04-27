@@ -23,8 +23,8 @@ if DEBUG:
     SECURE_PROXY_SSL_HEADER = None
 else:
     ALLOWED_HOSTS = ['*']
-    SECURE_SSL_REDIRECT = False
-    SECURE_PROXY_SSL_HEADER = None
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_TRUSTED_ORIGINS = [
     "https://datasets.api.dataidea.org",
