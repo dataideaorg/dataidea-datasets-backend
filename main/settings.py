@@ -28,7 +28,7 @@ else:
 
 CSRF_TRUSTED_ORIGINS = [
     "https://datasets.api.dataidea.org",
-    'https://dataidea-datasets-backend-production.up.railway.app/'
+    'https://dataidea-datasets-backend-production.up.railway.app'
 ]
 
 
