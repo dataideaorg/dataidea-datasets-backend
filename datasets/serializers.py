@@ -16,18 +16,18 @@ class DatasetSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     categories = CategorySerializer(many=True, read_only=True)
     category_ids = serializers.PrimaryKeyRelatedField(
-        many=True, 
-        write_only=True, 
+        many=True,
+        write_only=True,
         queryset=Category.objects.all(),
         source='categories'
     )
-    
+
     class Meta:
         model = Dataset
         fields = [
-            'id', 'title', 'slug', 'description', 'file', 
+            'id', 'title', 'slug', 'description', 'file',
             'file_size', 'file_type', 'categories', 'category_ids',
-            'tags', 'author', 'source_url', 'license', 
+            'tags', 'author', 'source_url', 'license',
             'download_count', 'created_at', 'updated_at'
         ]
         read_only_fields = ['slug', 'download_count', 'created_at', 'updated_at'] 

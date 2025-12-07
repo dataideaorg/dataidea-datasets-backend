@@ -29,22 +29,25 @@ class Dataset(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = models.TextField()
-    file = models.FileField(upload_to='datasets/', storage=storage if settings.USE_S3 else None)
+
+    # External file URL (Kaggle, GitHub, Google Drive, etc.)
+    file = models.URLField(max_length=500, help_text="External link to dataset file")
+
     file_size = models.PositiveIntegerField(help_text="Size in KB", blank=True, null=True)
     file_type = models.CharField(max_length=50, blank=True)
     categories = models.ManyToManyField(Category, related_name='datasets')
     tags = models.CharField(max_length=500, blank=True, help_text="Comma-separated tags")
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='datasets')
-    source_url = models.URLField(blank=True)
+    source_url = models.URLField(blank=True, help_text="Original source/attribution URL (if different from file URL)")
     license = models.CharField(max_length=100, blank=True)
     download_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
-    
+
     def __str__(self):
         return self.title
